@@ -31,7 +31,7 @@ The main menu accept two commands: "start" and "exit". The "start" command takes
 possible for now: "user" to play as a human, and "easy", "medium" and "hard" to play as an easy level AI.
 The command "exit" should simply terminate the program.
 
-The first player use the "X" symbol, the second "O".
+The first player uses the "X" symbol, the second "O".
 
 If any of the player is human, the user should input 2 numbers that represent the cell on which user wants to make his 
 "X" or "O".
