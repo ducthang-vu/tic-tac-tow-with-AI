@@ -27,8 +27,8 @@ does not rely on the blunders of the opponent, it plays perfectly regardless of 
 
 Download the repository and run tic-tac-tow.py.
 
-The main menu accept two commands: "**start**" and "**exit**". The "start" command takes two parameters: four parameters are 
-possible for now: "**user**" to play as a human, and "**easy**", "**medium**" and "**hard**" to play as an easy level AI.
+The main menu accepts two commands: "**start**" and "**exit**". The "start" command takes two parameters: four parameters are 
+possible: "**user**" to play as a human, and "**easy**", "**medium**" and "**hard**" to play as an easy level AI.
 The command "exit" should simply terminate the program.
 
 The first player uses the "X" symbol, the second "O".
