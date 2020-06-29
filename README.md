@@ -5,7 +5,7 @@ Xs and Os.
 
 This project is from the **Jetbrain Academy** (https://www.jetbrains.com/academy/).
  
-## Feature
+## Features
 
 It is possible to play the game with the AI, with three levels.
 
