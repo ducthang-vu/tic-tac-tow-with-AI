@@ -1,6 +1,6 @@
 # Tic Tac Tow with AI
 
-This is a implementation of the paper-and-pencil game from childhood: Tic-Tac-Toe, also known as Noughts and crosses or 
+This is a python implementation of the paper-and-pencil game from childhood: Tic-Tac-Toe, also known as Noughts and crosses or 
 Xs and Os.
 
 This project is from the **Jetbrain Academy** (https://www.jetbrains.com/academy/).
