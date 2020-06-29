@@ -7,9 +7,9 @@ This project is from the **Jetbrain Academy** (https://www.jetbrains.com/academy
  
 ## Feature
 
-It is possible to player the game with the AI, with three levels.
+It is possible to play the game with the AI, with three levels.
 
-The "**easy**" level make will make random moves.
+The "**easy**" level will make random moves.
 
 The "**medium**" level difficulty makes a move using the following process:
 
@@ -17,7 +17,7 @@ The "**medium**" level difficulty makes a move using the following process:
     2. If the opponent can win in one move, it plays the third itself to block the opponent to win.
     3. Otherwise, it makes a random move. 
 
-THe "**hard**" level difficulty implements the **Minimax** algorithm, this is the brute force algorithm that maximizes the 
+The "**hard**" level difficulty implements the **minimax** algorithm, this is the brute force algorithm that maximizes the 
 value of the own position and minimizes the value of the opponent's position. Basically, it can see all possible 
 outcomes till the end of the game and choose the best of them considering his opponent also would play perfectly. So, it 
 does not rely on the blunders of the opponent, it plays perfectly regardless of the opponent's skill.
@@ -31,7 +31,7 @@ The main menu accept two commands: "start" and "exit". The "start" command takes
 possible for now: "user" to play as a human, and "easy", "medium" and "hard" to play as an easy level AI.
 The command "exit" should simply terminate the program.
 
-The first player use the "X" symbol, the secondo "O".
+The first player use the "X" symbol, the second "O".
 
 If any of the player is human, the user should input 2 numbers that represent the cell on which user wants to make his 
 "X" or "O".
