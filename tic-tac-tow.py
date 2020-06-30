@@ -141,7 +141,7 @@ class Game:
 
     def play(self):
         print(self.field)
-        for turn in range(9 - len(self.field.free_cells), 9):
+        for turn in range(9):
             Game.player_move(self.players[turn % 2])(self)
             print(self.field)
             if not self.field.state == 'Game not finished':
