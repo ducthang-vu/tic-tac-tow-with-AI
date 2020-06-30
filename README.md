@@ -34,7 +34,7 @@ The command "exit" should simply terminate the program.
 The first player uses the "X" symbol, the second "O".
 
 If any of the player is human, the user should input 2 numbers that represent the cell on which user wants to make his 
-"X" or "O".
+"X" or "O". The coordinate (1 1) is the bottom left cell.
 
 ```
 Input command: > start user hard
@@ -43,18 +43,21 @@ Input command: > start user hard
 |       |
 |       |
 ---------
-Enter the coordinates: (x y) > 2 2
+
+Enter the coordinates: (x y) > 2 3
 ---------
-|       |
 |   X   |
 |       |
+|       |
 ---------
+
 Making move level "hard"
 ---------
-|     O |
-|   X   |
+| O X   |
+|       |
 |       |
 ---------
+
 Enter the coordinates: (x y) > 
 ```
 

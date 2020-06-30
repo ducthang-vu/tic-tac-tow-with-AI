@@ -14,7 +14,6 @@ class Field:
             self.cells = dict(zip(Field.coords, [' ' for _ in range(9)]))
         else:
             self.cells = dict(zip(Field.coords, start))
-        self.is_X_turn = bool(Counter(self.cells.values())[' '] % 2)
         self.state = 'Game not finished'
 
     def __str__(self):
@@ -22,14 +21,15 @@ class Field:
                 '| {} {} {} |\n'
                 '| {} {} {} |\n'
                 '| {} {} {} |\n'
-                '---------').format(*self.cells.values())
+                '---------\n').format(*self.cells.values())
 
     @property
     def free_cells(self):
         return [key for key in self.cells if self.cells[key] == ' ']
 
-    def get_symbol(self, current=True):
-        return ('X' if self.is_X_turn else 'O') if current else ('O' if self.is_X_turn else 'X')
+    @property
+    def symbol(self):
+        return 'X' if bool(Counter(self.cells.values())[' '] % 2) else 'O'
 
     def evaluate(self, coord):
         return any(map(lambda a: len(set(a)) == 1 and ' ' not in set(a),
@@ -39,15 +39,14 @@ class Field:
                         [self.cells[n, 4 - n] for n in range(1, 4)]
                         ]))
 
-    def update(self, coord, with_current_symbol=True, raise_OccupiedCell=True):
+    def update(self, coord, raise_OccupiedCell=True):
         if any(n < 1 or n > 3 for n in [*coord]):
             raise IndexError
         if raise_OccupiedCell and not self.cells[coord] == ' ':
             raise OccupiedCell
 
-        symbol = self.get_symbol(with_current_symbol)
+        symbol = self.symbol
         self.cells[coord] = symbol
-        self.is_X_turn = not self.is_X_turn
         if self.evaluate(coord):
             self.state = "{} wins".format(symbol)
             return True
@@ -92,7 +91,7 @@ class Game:
             field = self.field
         scenarios = {cell: Field(field.cells.values()) for cell in field.free_cells}
         return [cell for cell, field_obj in scenarios.items() if field_obj.update(cell)] or \
-               [cell for cell, field_obj in scenarios.items() if field_obj.update(cell, True, False)]
+               [cell for cell, field_obj in scenarios.items() if field_obj.update(cell, False)]
 
     def bot_medium(self):
         print('Making move level "medium"')
