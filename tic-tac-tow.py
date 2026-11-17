@@ -1,9 +1,22 @@
 from itertools import product
 from random import choice
 from collections import Counter
+from enum import Enum
 
 
-class OccupiedCell(Exception): pass
+class OccupiedCell(Exception):
+    pass
+
+
+class GameState(Enum):
+    NOT_FINISHED = 'Game not finished'
+    X_WINS = 'X wins'
+    O_WINS = 'O wins'
+    DRAW = 'Draw'
+
+    @classmethod
+    def win_for(cls, symbol):
+        return cls.X_WINS if symbol == 'X' else cls.O_WINS
 
 
 class Field:
@@ -14,7 +27,7 @@ class Field:
             self.cells = dict(zip(Field.coords, [' ' for _ in range(9)]))
         else:
             self.cells = dict(zip(Field.coords, start))
-        self.state = 'Game not finished'
+        self.state = GameState.NOT_FINISHED
 
     def __str__(self):
         return ('---------\n'
@@ -39,19 +52,19 @@ class Field:
                         [self.cells[n, 4 - n] for n in range(1, 4)]
                         ]))
 
-    def update(self, coord, raise_OccupiedCell=True):
+    def update(self, coord, raise_if_occupied=True):
         if any(n < 1 or n > 3 for n in [*coord]):
             raise IndexError
-        if raise_OccupiedCell and not self.cells[coord] == ' ':
+        if raise_if_occupied and not self.cells[coord] == ' ':
             raise OccupiedCell
 
         symbol = self.symbol
         self.cells[coord] = symbol
         if self.evaluate(coord):
-            self.state = "{} wins".format(symbol)
+            self.state = GameState.win_for(symbol)
             return True
         elif not Counter(self.cells.values())[' ']:
-            self.state = 'Draw'
+            self.state = GameState.DRAW
         return False
 
 
@@ -59,7 +72,12 @@ class Game:
     def __init__(self):
         self.players = []
         self.field = None
-        self.main()
+        self.moves = {
+            'user': self.user_moves,
+            'easy': self.bot_easy,
+            'medium': self.bot_medium,
+            'hard': self.bot_hard,
+        }
 
     def user_moves(self):
         while True:
@@ -96,22 +114,25 @@ class Game:
     def bot_medium(self):
         print('Making move level "medium"')
         candidate_moves = self.get_candidate_moves()
-        return self.make_random_move(candidate_moves) if candidate_moves else self.make_random_move()
+        if candidate_moves:
+            self.make_random_move(candidate_moves)
+        else:
+            self.make_random_move()
 
-    def minimax(self, field=None, deep=0):
+    def minimax(self, field=None, depth=0):
         if field is None:
             field = self.field
         branches = {}
         for cell in field.free_cells:
             scenario = Field(field.cells.values())
             if scenario.update(cell):
-                branches[cell] = -1 if deep % 2 else 1
-            elif scenario.state == 'Draw':
+                branches[cell] = -1 if depth % 2 else 1
+            elif scenario.state == GameState.DRAW:
                 branches[cell] = 0
             else:
-                branches[cell] = self.minimax(scenario, deep + 1)
-        if deep:
-            return min(branches.values()) if deep % 2 else max(branches.values())
+                branches[cell] = self.minimax(scenario, depth + 1)
+        if depth:
+            return min(branches.values()) if depth % 2 else max(branches.values())
         else:
             return {
                 1: [cell for cell in branches if branches[cell] == 1],
@@ -122,36 +143,24 @@ class Game:
     def bot_hard(self):
         print('Making move level "hard"')
         all_moves = self.minimax()
-        if all_moves[1]:
-            return self.make_random_move(all_moves[1])
-        if all_moves[0]:
-            return self.make_random_move(all_moves[0])
-        if all_moves[-1]:
-            return self.make_random_move(all_moves[-1])
-
-    @classmethod
-    def player_move(cls, key):
-        player_move = {
-            'user': cls.user_moves,
-            'easy': cls.bot_easy,
-            'medium': cls.bot_medium,
-            'hard': cls.bot_hard
-        }
-        return player_move[key]
+        for score in (1, 0, -1):
+            if all_moves[score]:
+                self.make_random_move(all_moves[score])
+                break
 
     def play(self):
         print(self.field)
         for turn in range(9):
-            Game.player_move(self.players[turn % 2])(self)
+            self.moves[self.players[turn % 2]]()
             print(self.field)
-            if not self.field.state == 'Game not finished':
-                print(self.field.state)
+            if self.field.state != GameState.NOT_FINISHED:
+                print(self.field.state.value)
                 break
 
     def set_players(self, command):
         try:
             start_command, first_player, second_player = command.split()
-            if all(player in ['user', 'easy', 'medium', 'hard'] for player in [first_player, second_player]):
+            if all(player in self.moves for player in [first_player, second_player]):
                 self.players = [first_player, second_player]
                 return True
             else:
@@ -172,4 +181,4 @@ class Game:
 
 
 if __name__ == '__main__':
-    Game()
+    Game().main()
