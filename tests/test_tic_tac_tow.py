@@ -159,6 +159,13 @@ class GameTests(unittest.TestCase):
         self.assertIn('This cell is occupied! Choose another one!', output)
         self.assertTrue(output.rstrip().endswith('X wins'), output)
 
+    def test_wrong_number_of_coordinates_has_its_own_message(self):
+        for entry in ['1', '1 2 3']:
+            with self.subTest(entry=entry):
+                output = run_game(['start user user', entry, '1 1', '2 1', '1 2', '2 2', '1 3', 'exit'])
+                self.assertIn('Enter exactly two coordinates!', output)
+                self.assertNotIn('You should enter numbers!', output)
+
     def test_bad_command_prints_error(self):
         self.assertIn('Bad parameters!', run_game(['start user nobody', 'exit']))
 
