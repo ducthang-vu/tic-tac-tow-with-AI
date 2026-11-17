@@ -119,12 +119,19 @@ class GameTests(unittest.TestCase):
             game.bot_medium()
         self.assertEqual(game.field.cells[(3, 1)], 'O')
 
-    def test_hard_bot_takes_an_immediate_win(self):
+    def test_hard_bot_plays_a_winning_move(self):
+        # The hard bot picks at random among all moves that lead to a win, so it
+        # may win now or later (see issue #6). Check that its move is one of them.
         game = ttt.Game()
         game.field = make_field(['  X', 'OO ', 'XX '])  # O to move; (3,2) wins now
+        winning_moves = game.minimax()[1]
+        self.assertIn((3, 2), winning_moves)
+        before = dict(game.field.cells)
         with contextlib.redirect_stdout(io.StringIO()):
             game.bot_hard()
-        self.assertEqual(game.field.state, ttt.GameState.O_WINS)
+        played = [c for c in before if before[c] != game.field.cells[c]]
+        self.assertEqual(len(played), 1)
+        self.assertIn(played[0], winning_moves)
 
     def test_hard_vs_hard_is_a_draw(self):
         output = run_game(['start hard hard', 'exit'])
