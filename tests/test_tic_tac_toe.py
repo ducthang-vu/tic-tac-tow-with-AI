@@ -65,7 +65,6 @@ class FieldTests(unittest.TestCase):
         self.assertTrue(field.update((3, 1)))  # X completes the bottom row
         self.assertEqual(field.state, ttt.GameState.X_WINS)
 
-    @unittest.expectedFailure  # Known bug, see issue #5: evaluate() checks both diagonals
     def test_no_false_win_from_a_diagonal_the_move_is_not_on(self):
         field = make_field(['X  ', ' X ', '  X'])  # full main diagonal of X
         self.assertFalse(field.evaluate((1, 2)))  # cell (1,2) is not on it
