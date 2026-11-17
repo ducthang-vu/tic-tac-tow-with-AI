@@ -1,4 +1,4 @@
-# Tic Tac Tow with AI
+# Tic Tac Toe with AI
 
 This is a python implementation of the paper-and-pencil game from childhood: Tic-Tac-Toe, also known as Noughts and crosses or 
 Xs and Os.
@@ -25,7 +25,7 @@ does not rely on the blunders of the opponent, it plays perfectly regardless of 
  
 ## Usage
 
-Download the repository and run tic-tac-tow.py.
+Download the repository and run tic_tac_toe.py.
 
 The main menu accepts two commands: "**start**" and "**exit**". The "start" command takes two parameters: four parameters are 
 possible: "**user**" to play as a human, and "**easy**", "**medium**" and "**hard**" to play as an easy level AI.

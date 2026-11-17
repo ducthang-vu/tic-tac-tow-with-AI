@@ -1,19 +1,17 @@
-"""Tests for tic-tac-tow.py, using only the standard library.
+"""Tests for tic_tac_toe.py, using only the standard library.
 
 Run from the repository root with:
     python3 -m unittest discover -s tests -v
 """
 import contextlib
-import importlib.util
 import io
 import os
+import sys
 import unittest
 from unittest import mock
 
-MODULE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tic-tac-tow.py')
-spec = importlib.util.spec_from_file_location('tic_tac_tow', MODULE_PATH)
-ttt = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(ttt)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+import tic_tac_toe as ttt  # noqa: E402
 
 
 def make_field(rows):
