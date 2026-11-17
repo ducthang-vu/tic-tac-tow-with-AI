@@ -181,4 +181,7 @@ class Game:
 
 
 if __name__ == '__main__':
-    Game().main()
+    try:
+        Game().main()
+    except (KeyboardInterrupt, EOFError):
+        print()
