@@ -81,8 +81,12 @@ class Game:
 
     def user_moves(self):
         while True:
+            parts = input('Enter the coordinates: (x y) > ').split()
+            if len(parts) != 2:
+                print('Enter exactly two coordinates!')
+                continue
             try:
-                x, y = [int(n) for n in input('Enter the coordinates: (x y) > ').split()]
+                x, y = map(int, parts)
             except ValueError:
                 print('You should enter numbers!')
                 continue
