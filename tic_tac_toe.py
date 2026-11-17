@@ -44,13 +44,28 @@ class Field:
     def symbol(self):
         return 'X' if bool(Counter(self.cells.values())[' '] % 2) else 'O'
 
+    WIN_LINES = [
+        [(1, 1), (2, 1), (3, 1)],  # bottom row
+        [(1, 2), (2, 2), (3, 2)],  # middle row
+        [(1, 3), (2, 3), (3, 3)],  # top row
+        [(1, 1), (1, 2), (1, 3)],  # left column
+        [(2, 1), (2, 2), (2, 3)],  # middle column
+        [(3, 1), (3, 2), (3, 3)],  # right column
+        [(1, 1), (2, 2), (3, 3)],  # main diagonal
+        [(3, 1), (2, 2), (1, 3)],  # anti-diagonal
+    ]
+
+    def copy(self):
+        new = Field()
+        new.cells = dict(self.cells)
+        new.state = self.state
+        return new
+
     def evaluate(self, coord):
-        return any(map(lambda a: len(set(a)) == 1 and ' ' not in set(a),
-                       [[self.cells[(coord[0]), n] for n in range(1, 4)],
-                        [self.cells[n, (coord[1])] for n in range(1, 4)],
-                        [self.cells[n, n] for n in range(1, 4)],
-                        [self.cells[n, 4 - n] for n in range(1, 4)]
-                        ]))
+        return any(
+            all(self.cells[c] == self.cells[coord] != ' ' for c in line)
+            for line in Field.WIN_LINES if coord in line
+        )
 
     def update(self, coord, raise_if_occupied=True):
         if any(n < 1 or n > 3 for n in [*coord]):
@@ -111,7 +126,7 @@ class Game:
     def get_candidate_moves(self, field=None):
         if field is None:
             field = self.field
-        scenarios = {cell: Field(field.cells.values()) for cell in field.free_cells}
+        scenarios = {cell: field.copy() for cell in field.free_cells}
         return [cell for cell, field_obj in scenarios.items() if field_obj.update(cell)] or \
                [cell for cell, field_obj in scenarios.items() if field_obj.update(cell, False)]
 
@@ -128,7 +143,7 @@ class Game:
             field = self.field
         branches = {}
         for cell in field.free_cells:
-            scenario = Field(field.cells.values())
+            scenario = field.copy()
             if scenario.update(cell):
                 branches[cell] = -1 if depth % 2 else 1
             elif scenario.state == GameState.DRAW:
